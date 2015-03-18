@@ -1,0 +1,29 @@
+{
+  "name": "wechat-co-parser",
+  "version": "0.0.1",
+  "description": "Parse XML message from WeChat",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "wechat",
+    "wechat-parser",
+    "微信",
+    "XML",
+    "parser",
+    "xml-parser",
+    "解析"
+  ],
+  "author": "Zation <zation1@gmail.com>",
+  "dependencies": {
+    "xml2js": "0.4.4"
+  },
+  "devDependencies": {
+    "mocha": "1.21.4",
+    "should": "2.0.1"
+  },
+  "repository": "zation/wechat-co-parser",
+  "author": "Zation <zation1@gmail.com>",
+  "license": "MIT"
+}
