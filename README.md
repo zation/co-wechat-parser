@@ -1,60 +1,75 @@
-wechat-parser
-============================
+# co-wechat-parser
 
-解析微信推送的XML消息
+解析微信推送的XML消息，可用于koa中间件，也可以直接调用，返回Promise。
 
-用法示例
-----------------------------
+## 安装
+
+使用[npm](https://www.npmjs.com/package/co-wechat-parser)安装：
+
+```bash
+npm install --save co-wechat-parser
+```
+
+## 用法示例
+
+### 作为中间件使用
 
 ```javascript
-/**
- * 作为中间件使用
- */
 
-var express = require('express');
-var parser = require('wechat-parser');
+var koa = require('koa');
+var parser = require('co-wechat-parser');
 
-// 默认为 false，可设置为 true，设置后所有消息对象的键名为小写
-parser.lowercase(false);
+var app = koa();
+app.use(parser.middleware());
+```
 
-// 默认为 false，设置后 req.weixin_xml 为原始XML字符串
-parser.original('weixin_xml');
+### 直接调用
 
-var app = express();
-app.use(parser.middleware('weixin'));
-app.use(function(req, res) {
-  console.log(req.weixin);
-  console.log(req.weixin_xml);
-});
+```javascript
 
+var koa = require('koa');
+var parser = require('co-wechat-parser');
 
-/**
- * 直接调用
- */
-
-app.use(function(req, res) {
-  parser.parse(req, function(err, message) {
-    if (err) throw err;
-    console.log(message);
-  });
+var app = koa();
+app.use(function() {
+	parser.parse(this.req)
+		.then(function(message) {
+			console.log(message);
+		})
+		.catch(function(error) {
+			console.log(error);
+		});
 });
 ```
 
+## API
 
-API 参考
-----------------------------
-__wechatParser.middleware([body]);__
+### camelcase
 
-传入可选参数`body`（`String`类型），返回解析微信推送消息的中间件函数。
+默认为`true`，将结果Object的key转为驼峰形式。可设置为`false`，保持微信的原始形式。
 
-__wechatParser.parse(stream, callback);__
+```javascript
 
-传入数据流参数（这里一般为`req`对象），通过回调返回解析后的微信消息对象。回调函数包含`err`和`message`2个参数。
+var koa = require('koa');
+var parser = require('co-wechat-parser');
 
-__wechatParser.lowercase(bool)__
+var app = koa();
+app.use(parser.middleware({
+    camelcase: false
+}));
+```
 
-可配置的布尔属性，默认为`false`，设置是否将将返回的消息对象的键名小写。
+### key
 
-__wechatParser.original(name)__
+默认为`body`，将结果Object挂载到`this.request.body`上。可设置为其他的`String`，改变挂载属性。
 
-将原始的XML字符串挂载到`req`请求对象上，默认为`false`，可设置为字符串。
+```javascript
+
+var koa = require('koa');
+var parser = require('co-wechat-parser');
+
+var app = koa();
+app.use(parser.middleware({
+    key: 'wexin'
+}));
+```
