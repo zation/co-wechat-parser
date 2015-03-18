@@ -1,7 +1,7 @@
 {
   "name": "co-wechat-parser",
   "version": "0.1.3",
-  "description": "Parse XML message from WeChat",
+  "description": "An XML message parser for WeChat used in Koa",
   "main": "index.js",
   "scripts": {
     "test": "mocha --harmony"
@@ -13,6 +13,8 @@
     "XML",
     "parser",
     "xml-parser",
+    "co",
+    "koa",
     "解析"
   ],
   "author": "Zation <zation1@gmail.com>",

@@ -1,6 +1,6 @@
 # co-wechat-parser
 
-解析微信推送的XML消息，可用于koa中间件，也可以直接调用，返回Promise。
+解析微信推送的XML消息，可用于koa中间件，也可以直接调用，返回Promise。English document is [below](#English document).
 
 ## 安装
 
@@ -72,4 +72,84 @@ var app = koa();
 app.use(parser.middleware({
     key: 'wexin'
 }));
+
+// 从`this.request.wexin`读取数据
+```
+
+# English document
+
+An XML message parser for WeChat used in Koa. Can be middleware or promise.
+
+## Install
+
+Install with [npm](https://www.npmjs.com/package/co-wechat-parser)
+
+```bash
+npm install --save co-wechat-parser
+```
+
+## Example
+
+### Use as middleware
+
+```javascript
+
+var koa = require('koa');
+var parser = require('co-wechat-parser');
+
+var app = koa();
+app.use(parser.middleware());
+```
+
+### Use as promise
+
+```javascript
+
+var koa = require('koa');
+var parser = require('co-wechat-parser');
+
+var app = koa();
+app.use(function() {
+	parser.parse(this.req)
+		.then(function(message) {
+			console.log(message);
+		})
+		.catch(function(error) {
+			console.log(error);
+		});
+});
+```
+
+## API
+
+### camelcase
+
+Default is `true`, will make the key of return object as camelcase. If set to `false`, the key will keep the original format.
+
+```javascript
+
+var koa = require('koa');
+var parser = require('co-wechat-parser');
+
+var app = koa();
+app.use(parser.middleware({
+    camelcase: false
+}));
+```
+
+### key
+
+Default is `body`, will setup the result on `this.request.body`. Can be set to another `String`.
+
+```javascript
+
+var koa = require('koa');
+var parser = require('co-wechat-parser');
+
+var app = koa();
+app.use(parser.middleware({
+    key: 'wexin'
+}));
+
+// Use `this.request.wexin` to get the result.
 ```
