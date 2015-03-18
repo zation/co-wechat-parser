@@ -1,6 +1,6 @@
 # co-wechat-parser
 
-解析微信推送的XML消息，可用于koa中间件，也可以直接调用，返回Promise。English document is [below](#English document).
+解析微信推送的XML消息，可用于koa中间件，也可以直接调用，返回Promise。English document is [below](#english-document).
 
 ## 安装
 
@@ -153,3 +153,5 @@ app.use(parser.middleware({
 
 // Use `this.request.wexin` to get the result.
 ```
+
+Published under the [MIT License](http://opensource.org/licenses/MIT).
