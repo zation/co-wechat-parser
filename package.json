@@ -1,6 +1,6 @@
 {
-  "name": "wechat-co-parser",
-  "version": "0.0.1",
+  "name": "co-wechat-parser",
+  "version": "0.0.2",
   "description": "Parse XML message from WeChat",
   "main": "index.js",
   "scripts": {
