@@ -131,6 +131,16 @@ describe('parse()', function() {
     });
   });
 
+  it('parse xml to camelcase if camelcase is true should ok', function(done) {
+    var payxml = path.join(__dirname, 'xmls/pay_notify.xml');
+    var stream = fs.createReadStream(payxml);
+    parse(stream, {camelcase: true}).then(function(message) {
+      message.should.be.Object;
+      message.should.have.property('totalFee');
+      done();
+    });
+  });
+
   it('parse xml with sign but no secret set should ok', function(done) {
     var payxml = path.join(__dirname, 'xmls/pay_notify_bad_sign.xml');
     var stream = fs.createReadStream(payxml);
