@@ -4,11 +4,15 @@ var fs = require('fs');
 var path = require('path');
 require('should');
 
+var opts = {
+  camelcase: false
+};
+
 describe('parse()', function() {
   it('parse text message should ok', function(done) {
     var text = path.join(__dirname, 'xmls/text.xml');
     var stream = fs.createReadStream(text);
-    parse(stream).then(function(message) {
+    parse(stream, opts).then(function(message) {
       message.should.be.Object;
       message.should.have.property('MsgId');
       message.should.have.property('ToUserName');
@@ -23,7 +27,7 @@ describe('parse()', function() {
   it('parse image message should ok', function(done) {
     var image = path.join(__dirname, 'xmls/image.xml');
     var stream = fs.createReadStream(image);
-    parse(stream).then(function(message) {
+    parse(stream, opts).then(function(message) {
       message.should.be.Object;
       message.should.have.property('MsgId');
       message.should.have.property('ToUserName');
@@ -39,7 +43,7 @@ describe('parse()', function() {
   it('parse voice message should ok', function(done) {
     var voice = path.join(__dirname, 'xmls/voice.xml');
     var stream = fs.createReadStream(voice);
-    parse(stream).then(function(message) {
+    parse(stream, opts).then(function(message) {
       message.should.be.Object;
       message.should.have.property('MsgId');
       message.should.have.property('ToUserName');
@@ -55,7 +59,7 @@ describe('parse()', function() {
   it('parse mass result event should ok', function(done) {
     var result = path.join(__dirname, 'xmls/mass_send_job_finish.xml');
     var stream = fs.createReadStream(result);
-    parse(stream).then(function(message) {
+    parse(stream, opts).then(function(message) {
       message.should.be.Object;
       message.should.have.property('ToUserName');
       message.should.have.property('FromUserName');
@@ -75,7 +79,7 @@ describe('parse()', function() {
   it('parse bad message should not ok', function(done) {
     var badxml = path.join(__dirname, 'xml.js');
     var stream = fs.createReadStream(badxml);
-    parse(stream).catch(function(error) {
+    parse(stream, opts).catch(function(error) {
       error.should.be.ok;
       done();
     });
@@ -84,7 +88,62 @@ describe('parse()', function() {
   it('parse bad xml should not ok', function(done) {
     var badxml = path.join(__dirname, 'xmls/bad.xml');
     var stream = fs.createReadStream(badxml);
-    parse(stream).catch(function(error) {
+    parse(stream, opts).catch(function(error) {
+      error.should.be.ok;
+      done();
+    });
+  });
+
+  it('parse pay notification xml should ok', function(done) {
+    var payxml = path.join(__dirname, 'xmls/pay_notify.xml');
+    var stream = fs.createReadStream(payxml);
+    parse(stream, opts).then(function(message) {
+      message.should.be.Object;
+      done();
+    });
+  });
+
+  it('parse pay notification xml with bad secret should not ok', function(done) {
+    var payxml = path.join(__dirname, 'xmls/pay_notify.xml');
+    var stream = fs.createReadStream(payxml);
+    parse(stream, {secret: 'wrongsecret'}).catch(function(error) {
+      error.should.be.ok;
+      done();
+    });
+  });
+
+  it('parse pay notification xml with bad sign should not ok', function(done) {
+    var payxml = path.join(__dirname, 'xmls/pay_notify_bad_sign.xml');
+    var stream = fs.createReadStream(payxml);
+    parse(stream, {secret: 'mysecret'}).catch(function(error) {
+      error.should.be.ok;
+      done();
+    });
+  });
+
+  it('parse xml to camelcase by default should ok', function(done) {
+    var payxml = path.join(__dirname, 'xmls/pay_notify.xml');
+    var stream = fs.createReadStream(payxml);
+    parse(stream, {secret: 'mysecret'}).then(function(message) {
+      message.should.be.Object;
+      message.should.have.property('totalFee');
+      done();
+    });
+  });
+
+  it('parse xml with sign but no secret set should ok', function(done) {
+    var payxml = path.join(__dirname, 'xmls/pay_notify_bad_sign.xml');
+    var stream = fs.createReadStream(payxml);
+    parse(stream).then(function(message) {
+      message.should.be.Object;
+      done();
+    });
+  });
+
+  it('parse xml without sign if secret set should not ok', function(done) {
+    var payxml = path.join(__dirname, 'xmls/pay_notify_no_sign.xml');
+    var stream = fs.createReadStream(payxml);
+    parse(stream, {secret: 'somesecret'}).catch(function(error) {
       error.should.be.ok;
       done();
     });
