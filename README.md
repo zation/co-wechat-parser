@@ -76,6 +76,22 @@ app.use(parser.middleware({
 // 从`this.request.wexin`读取数据
 ```
 
+### secret
+
+默认为 `undefined`, `secret` 微信密钥, 如果设置了该值, 将使用密钥签名验证微信返回的消息. 可设置为 `String`.
+
+```javascript
+
+var koa = require('koa');
+var parser = require('co-wechat-parser');
+
+var app = koa();
+app.use(parser.middleware({
+    secret: 'your secret from wechat'
+}));
+
+```
+
 # English document
 
 An XML message parser for WeChat used in Koa. Can be middleware or promise.
@@ -152,6 +168,22 @@ app.use(parser.middleware({
 }));
 
 // Use `this.request.wexin` to get the result.
+```
+
+### secret
+
+Default is `undefined`, `secret` is the merchant secret of WeChat, if set, will validate signature of payload from WeChat. Can be set as `String`.
+
+```javascript
+
+var koa = require('koa');
+var parser = require('co-wechat-parser');
+
+var app = koa();
+app.use(parser.middleware({
+    secret: 'your secret from wechat'
+}));
+
 ```
 
 Published under the [MIT License](http://opensource.org/licenses/MIT).
