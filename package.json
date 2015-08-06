@@ -1,6 +1,6 @@
 {
   "name": "co-wechat-parser",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "An XML message parser for WeChat used in Koa",
   "main": "index.js",
   "scripts": {
